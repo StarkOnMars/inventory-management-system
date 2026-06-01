@@ -3,6 +3,9 @@ from flask_cors import CORS
 from database import get_db_connection, init_database
 import sqlite3
 
+import traceback
+import sys
+
 app = Flask(__name__)
 CORS(app, origins=["https://inventory-frontend-nine-gray.vercel.app"], supports_credentials=True)  # Enable CORS for React frontend
 
@@ -301,6 +304,16 @@ def get_dashboard_stats():
         'total_customers': total_customers,
         'total_orders': total_orders
     })
+
+@app.errorhandler(Exception)
+def handle_error(e):
+    print("=" * 50)
+    print("ERROR OCCURRED:")
+    print(str(e))
+    traceback.print_exc()
+    print("=" * 50)
+    return jsonify({'error': str(e)}), 500
+
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
