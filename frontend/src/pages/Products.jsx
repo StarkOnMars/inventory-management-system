@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+const API_URL = import.meta.env.VITE_API_URL || '';
+
 function Products() {
   const [products, setProducts] = useState([]);
   const [formData, setFormData] = useState({
@@ -18,7 +20,7 @@ function Products() {
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get('/api/products');
+      const response = await axios.get(`${API_URL}/products`);
       setProducts(response.data);
     } catch (error) {
       showMessage('Error fetching products', 'error');
@@ -29,11 +31,11 @@ function Products() {
     e.preventDefault();
     try {
       if (editingId) {
-        await axios.put(`/api/products/${editingId}`, formData);
+        await axios.put(`${API_URL}/products/${editingId}`, formData);
         showMessage('Product updated successfully', 'success');
         setEditingId(null);
       } else {
-        await axios.post('/api/products', formData);
+        await axios.post(`${API_URL}/products`, formData);
         showMessage('Product created successfully', 'success');
       }
       setFormData({ name: '', sku: '', price: '', quantity: '' });
@@ -46,7 +48,7 @@ function Products() {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
       try {
-        await axios.delete(`/api/products/${id}`);
+        await axios.delete(`${API_URL}/products/${id}`);
         showMessage('Product deleted successfully', 'success');
         fetchProducts();
       } catch (error) {

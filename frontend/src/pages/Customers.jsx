@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+const API_URL = import.meta.env.VITE_API_URL || '';
+
 function Customers() {
   const [customers, setCustomers] = useState([]);
   const [formData, setFormData] = useState({
@@ -16,7 +18,7 @@ function Customers() {
 
   const fetchCustomers = async () => {
     try {
-      const response = await axios.get('/api/customers');
+      const response = await axios.get(`${API_URL}/customers`);
       setCustomers(response.data);
     } catch (error) {
       showMessage('Error fetching customers', 'error');
@@ -26,7 +28,7 @@ function Customers() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('/api/customers', formData);
+      await axios.post(`${API_URL}/customers`, formData);
       showMessage('Customer added successfully', 'success');
       setFormData({ name: '', email: '', phone: '' });
       fetchCustomers();
@@ -38,7 +40,7 @@ function Customers() {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this customer?')) {
       try {
-        await axios.delete(`/api/customers/${id}`);
+        await axios.delete(`${API_URL}/customers/${id}`);
         showMessage('Customer deleted successfully', 'success');
         fetchCustomers();
       } catch (error) {

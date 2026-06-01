@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+const API_URL = import.meta.env.VITE_API_URL || '';
+
 function Orders() {
   const [orders, setOrders] = useState([]);
   const [products, setProducts] = useState([]);
@@ -20,7 +22,7 @@ function Orders() {
 
   const fetchOrders = async () => {
     try {
-      const response = await axios.get('/api/orders');
+      const response = await axios.get(`${API_URL}/orders`);
       setOrders(response.data);
     } catch (error) {
       console.error('Error fetching orders:', error);
@@ -29,7 +31,7 @@ function Orders() {
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get('/api/products');
+      const response = await axios.get(`${API_URL}/products`);
       setProducts(response.data);
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -38,7 +40,7 @@ function Orders() {
 
   const fetchCustomers = async () => {
     try {
-      const response = await axios.get('/api/customers');
+      const response = await axios.get(`${API_URL}/customers`);
       setCustomers(response.data);
     } catch (error) {
       console.error('Error fetching customers:', error);
@@ -48,7 +50,7 @@ function Orders() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('/api/orders', formData);
+      await axios.post(`${API_URL}/orders`, formData);
       showMessage('Order created successfully', 'success');
       setFormData({ customer_id: '', product_id: '', quantity: '' });
       fetchOrders();
@@ -61,7 +63,7 @@ function Orders() {
   const handleCancelOrder = async (id) => {
     if (window.confirm('Are you sure you want to cancel this order?')) {
       try {
-        await axios.delete(`/api/orders/${id}`);
+        await axios.delete(`${API_URL}/orders/${id}`);
         showMessage('Order cancelled successfully', 'success');
         fetchOrders();
         fetchProducts();
