@@ -4,7 +4,7 @@ from database import get_db_connection, init_database
 import sqlite3
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for React frontend
+CORS(app, origins=["https://inventory-frontend-nine-gray.vercel.app"], supports_credentials=True)  # Enable CORS for React frontend
 
 # Initialize database when app starts
 init_database()
