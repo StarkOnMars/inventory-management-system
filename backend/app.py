@@ -6,9 +6,16 @@ import os
 
 app = Flask(__name__)
 
-# Configure CORS
-FRONTEND_URL = os.environ.get('FRONTEND_URL', 'http://localhost:3000')
-CORS(app, origins=[FRONTEND_URL, "https://*.vercel.app", "http://localhost:3000", "http://localhost:5173"])
+# Configure CORS - Allow all origins (simplest for now)
+CORS(app, resources={r"/*": {"origins": "*"}})
+
+# Add CORS headers after every request
+@app.after_request
+def add_cors_headers(response):
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
+    response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
+    return response
 
 # Initialize database when app starts
 init_database()
