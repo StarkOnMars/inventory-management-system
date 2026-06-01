@@ -1,5 +1,12 @@
 FROM python:3.13-slim
 
+# Install PostgreSQL development libraries
+RUN apt-get update && apt-get install -y \
+    gcc \
+    postgresql-client \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 
 COPY requirements.txt .
